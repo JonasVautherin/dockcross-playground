@@ -11,8 +11,9 @@ install:
     - docker run --rm dockcross/manylinux-x64 > ./dockcross_manylinux-x64
     - chmod +x ./dockcross_manylinux-x64
     - git clone --depth 1 https://github.com/curl/curl
-    - git clone --depth 1 https://github.com/boringssl/boringssl
-    - git clone --depth 1 https://github.com/openssl/openssl
+#    - git clone --depth 1 https://github.com/boringssl/boringssl
+#    - git clone --depth 1 https://github.com/openssl/openssl
+    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
 
 script:
     - set -e
@@ -22,6 +23,9 @@ script:
 #    - cd ${TRAVIS_BUILD_DIR}/boringssl
 #    - ../dockcross_manylinux-x64 bash -c "cmake -Bbuild -H."
 #    - ../dockcross_manylinux-x64 make -Cbuild
-    - cd ${TRAVIS_BUILD_DIR}/openssl
-    - ../dockcross_manylinux-x64 ./Configure
+#    - cd ${TRAVIS_BUILD_DIR}/openssl
+#    - ../dockcross_manylinux-x64 ./Configure
+#    - ../dockcross_manylinux-x64 make -Cbuild
+    - cd ${TRAVIS_BUILD_DIR}/c-ares
+    - ../dockcross_manylinux-x64 cmake -Bbuild -H.
     - ../dockcross_manylinux-x64 make -Cbuild
