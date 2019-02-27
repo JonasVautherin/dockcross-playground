@@ -13,8 +13,9 @@ install:
 #    - git clone --depth 1 https://github.com/curl/curl
 #    - git clone --depth 1 https://github.com/boringssl/boringssl
 #    - git clone --depth 1 https://github.com/openssl/openssl
-#    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
+    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
     - git clone --depth 1 -b v3.6.1 https://github.com/google/protobuf
+    - git clone -b 16856-fix-codegen-off-install https://github.com/dronecore/grpc
 
 script:
     - set -e
@@ -27,10 +28,9 @@ script:
 #    - cd ${TRAVIS_BUILD_DIR}/openssl
 #    - ../dockcross_manylinux-x64 ./Configure
 #    - ../dockcross_manylinux-x64 make -Cbuild
-#    - cd ${TRAVIS_BUILD_DIR}/c-ares
-#    - ../dockcross_manylinux-x64 cmake -Bbuild -S.
-#    - ../dockcross_manylinux-x64 make -Cbuild
-    - mkdir ${TRAVIS_BUILD_DIR}/install
-    - cd ${TRAVIS_BUILD_DIR}/protobuf
-    - ../dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/install -Dprotobuf_BUILD_TESTS=OFF -Bbuild -Scmake
-    - ../dockcross_manylinux-x64 make -Cbuild install
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bc-ares/build -Sc-ares
+    - ./dockcross_manylinux-x64 make -Cc-ares/build install
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Dprotobuf_BUILD_TESTS=OFF -Bprotobuf/build -Sprotobuf/cmake
+    - ./dockcross_manylinux-x64 make -Cprotobuf/build install
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_FIND_ROOT_PATH="/work/install;/work/grpc;/work/grpc/build;/work/grpc/build/bin" -DCMAKE_INSTALL_PREFIX=install -DgRPC_INSTALL_default=ON -DgRPC_BUILD_TESTS=OFF -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_PROTOBUF_PACKAGE_TYPE=CONFIG -DgRPC_SSL_PROVIDER=package -Bgrpc/build -Sgrpc
+    - ./dockcross_manylinux-x64 make -Cgrpc/build install
