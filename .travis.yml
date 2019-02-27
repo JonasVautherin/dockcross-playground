@@ -10,10 +10,11 @@ before_install:
 install:
     - docker run --rm dockcross/manylinux-x64 > ./dockcross_manylinux-x64
     - chmod +x ./dockcross_manylinux-x64
-    - git clone --depth 1 https://github.com/curl/curl
+#    - git clone --depth 1 https://github.com/curl/curl
 #    - git clone --depth 1 https://github.com/boringssl/boringssl
 #    - git clone --depth 1 https://github.com/openssl/openssl
-    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
+#    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
+    - git clone --depth 1 -b v3.6.1 https://github.com/google/protobuf
 
 script:
     - set -e
@@ -26,6 +27,9 @@ script:
 #    - cd ${TRAVIS_BUILD_DIR}/openssl
 #    - ../dockcross_manylinux-x64 ./Configure
 #    - ../dockcross_manylinux-x64 make -Cbuild
-    - cd ${TRAVIS_BUILD_DIR}/c-ares
-    - ../dockcross_manylinux-x64 cmake -Bbuild -H.
+#    - cd ${TRAVIS_BUILD_DIR}/c-ares
+#    - ../dockcross_manylinux-x64 cmake -Bbuild -H.
+#    - ../dockcross_manylinux-x64 make -Cbuild
+    - cd ${TRAVIS_BUILD_DIR}/protobuf
+    - ../dockcross_manylinux-x64 cmake -Dprotobuf_BUILD_TESTS=OFF -Bbuild -Scmake
     - ../dockcross_manylinux-x64 make -Cbuild
