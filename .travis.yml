@@ -9,6 +9,7 @@ before_install:
 
 install:
     - docker run --rm dockcross/manylinux-x64 > ./dockcross_manylinux-x64
+    - chmod +x ./dockcross_manylinux-x64
     - git clone --depth 1 https://github.com/curl/curl
 
 script:
