@@ -30,6 +30,7 @@ script:
 #    - cd ${TRAVIS_BUILD_DIR}/c-ares
 #    - ../dockcross_manylinux-x64 cmake -Bbuild -S.
 #    - ../dockcross_manylinux-x64 make -Cbuild
+    - mkdir ${TRAVIS_BUILD_DIR}/install
     - cd ${TRAVIS_BUILD_DIR}/protobuf
-    - ../dockcross_manylinux-x64 cmake -Dprotobuf_BUILD_TESTS=OFF -Bbuild -Scmake
-    - ../dockcross_manylinux-x64 make -Cbuild
+    - ../dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/install -Dprotobuf_BUILD_TESTS=OFF -Bbuild -Scmake
+    - ../dockcross_manylinux-x64 make -Cbuild install
