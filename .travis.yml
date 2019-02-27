@@ -1,0 +1,14 @@
+services:
+    - docker
+
+before_install:
+    - docker pull dockcross/manylinux-x64
+
+install:
+    - docker run --rm dockcross/manylinux-x64 > ./dockcross_manylinux-x64
+    - git clone --depth 1 https://github.com/curl/curl
+
+script:
+    - cd curl
+    - ../dockcross_manylinux-x64 cmake -DCMAKE_USE_OPENSSL=OFF -DCURL_CA_PATH_SET=OFF -DHAVE_POSIX_STRERROR_R=1 -Bbuild -H.
+    - ../dockcross_manylinux-x64 make -Cbuild
