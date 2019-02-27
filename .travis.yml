@@ -1,6 +1,9 @@
 services:
     - docker
 
+git:
+    depth: 1
+
 before_install:
     - docker pull dockcross/manylinux-x64
 
