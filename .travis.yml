@@ -11,7 +11,7 @@ before_install:
 install:
     - docker run --rm manylinux-x64-custom > ./dockcross_manylinux-x64
     - chmod +x ./dockcross_manylinux-x64
-#    - git clone --depth 1 https://github.com/curl/curl
+    - git clone --depth 1 https://github.com/curl/curl
     - git clone --depth 1 https://github.com/openssl/openssl
     - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
     - git clone --depth 1 -b v3.6.1 https://github.com/google/protobuf
@@ -20,9 +20,8 @@ install:
 script:
     - set -e
     - mkdir -p ${TRAVIS_BUILD_DIR}/install
-#    - cd ${TRAVIS_BUILD_DIR}/curl
-#    - ../dockcross_manylinux-x64 cmake -DCMAKE_USE_OPENSSL=OFF -DCURL_CA_PATH_SET=OFF -DHAVE_POSIX_STRERROR_R=1 -Bbuild -S.
-#    - ../dockcross_manylinux-x64 make -Cbuild
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_USE_OPENSSL=OFF -DCURL_CA_PATH_SET=OFF -DHAVE_POSIX_STRERROR_R=1 -Bcurl/build -Scurl
+    - ./dockcross_manylinux-x64 make -Ccurl/build
     - ./dockcross_manylinux-x64 bash -c "cd openssl && ./config --prefix=/install"
     - ./dockcross_manylinux-x64 --args "-v ${TRAVIS_BUILD_DIR}/install:/install" bash -c "make -Copenssl > /dev/null && make -Copenssl install > /dev/null"
     - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bc-ares/build -Sc-ares
