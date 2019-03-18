@@ -19,13 +19,14 @@ install:
     - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
     - git clone --depth 1 -b v3.6.1 https://github.com/google/protobuf
     - git clone -b hardcoded-musl-libc-compat https://github.com/dronecore/grpc
+    - git clone -b external-deps https://github.com/dronecode/dronecodesdk
 
 script:
     - set -e
     - mkdir -p ${TRAVIS_BUILD_DIR}/install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bzlib/build -Szlib
     - ./dockcross_manylinux-x64 make -Czlib/build install
-    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Btinyxml2/build -Stinyxml2
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON -Btinyxml2/build -Stinyxml2
     - ./dockcross_manylinux-x64 make -Ctinyxml2/build install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_USE_OPENSSL=OFF -DCURL_CA_PATH_SET=OFF -DHAVE_POSIX_STRERROR_R=1 -Bcurl/build -Scurl
     - ./dockcross_manylinux-x64 make -Ccurl/build
@@ -37,3 +38,6 @@ script:
     - ./dockcross_manylinux-x64 make -Cprotobuf/build install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_FIND_ROOT_PATH="/work/install;/work/grpc;/work/grpc/build;/work/grpc/build/bin" -DCMAKE_INSTALL_PREFIX=install -DgRPC_INSTALL_default=ON -DgRPC_BUILD_TESTS=OFF -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_PROTOBUF_PACKAGE_TYPE=CONFIG -DgRPC_SSL_PROVIDER=package -Bgrpc/build -Sgrpc
     - ./dockcross_manylinux-x64 make -Cgrpc/build install
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bdronecodesdk/build/default -Sdronecodesdk
+    - ./dockcross_manylinux-x64 make -Cdronecodesdk/build/default install
+    - ls install
