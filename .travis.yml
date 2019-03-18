@@ -15,11 +15,11 @@ install:
     - git clone --depth 1 -b v1.2.11 https://github.com/madler/zlib
     - git clone --depth 1 -b 7.0.1 https://github.com/leethomason/tinyxml2
     - git clone --depth 1 https://github.com/curl/curl
-    - git clone --depth 1 https://github.com/openssl/openssl
-    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
-    - git clone --depth 1 -b v3.6.1 https://github.com/google/protobuf
-    - git clone -b hardcoded-musl-libc-compat https://github.com/dronecore/grpc
-    - git clone -b external-deps https://github.com/dronecode/dronecodesdk
+#    - git clone --depth 1 https://github.com/openssl/openssl
+#    - git clone --depth 1 -b cares-1_15_0 https://github.com/c-ares/c-ares
+#    - git clone --depth 1 -b v3.6.1 https://github.com/google/protobuf
+#    - git clone -b hardcoded-musl-libc-compat https://github.com/dronecore/grpc
+    - git clone -b external-deps-without-termios2 https://github.com/dronecode/dronecodesdk --recursive
 
 script:
     - set -e
@@ -30,14 +30,14 @@ script:
     - ./dockcross_manylinux-x64 make -Ctinyxml2/build install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_USE_OPENSSL=OFF -DCURL_CA_PATH_SET=OFF -DHAVE_POSIX_STRERROR_R=1 -Bcurl/build -Scurl
     - ./dockcross_manylinux-x64 make -Ccurl/build
-    - ./dockcross_manylinux-x64 bash -c "cd openssl && ./config --prefix=/install"
-    - ./dockcross_manylinux-x64 --args "-v ${TRAVIS_BUILD_DIR}/install:/install" bash -c "make -Copenssl > /dev/null && make -Copenssl install > /dev/null"
-    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bc-ares/build -Sc-ares
-    - ./dockcross_manylinux-x64 make -Cc-ares/build install
-    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Dprotobuf_BUILD_TESTS=OFF -Bprotobuf/build -Sprotobuf/cmake
-    - ./dockcross_manylinux-x64 make -Cprotobuf/build install
-    - ./dockcross_manylinux-x64 cmake -DCMAKE_FIND_ROOT_PATH="/work/install;/work/grpc;/work/grpc/build;/work/grpc/build/bin" -DCMAKE_INSTALL_PREFIX=install -DgRPC_INSTALL_default=ON -DgRPC_BUILD_TESTS=OFF -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_PROTOBUF_PACKAGE_TYPE=CONFIG -DgRPC_SSL_PROVIDER=package -Bgrpc/build -Sgrpc
-    - ./dockcross_manylinux-x64 make -Cgrpc/build install
+#    - ./dockcross_manylinux-x64 bash -c "cd openssl && ./config --prefix=/install"
+#    - ./dockcross_manylinux-x64 --args "-v ${TRAVIS_BUILD_DIR}/install:/install" bash -c "make -Copenssl > /dev/null && make -Copenssl install > /dev/null"
+#    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bc-ares/build -Sc-ares
+#    - ./dockcross_manylinux-x64 make -Cc-ares/build install
+#    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Dprotobuf_BUILD_TESTS=OFF -Bprotobuf/build -Sprotobuf/cmake
+#    - ./dockcross_manylinux-x64 make -Cprotobuf/build install
+#    - ./dockcross_manylinux-x64 cmake -DCMAKE_FIND_ROOT_PATH="/work/install;/work/grpc;/work/grpc/build;/work/grpc/build/bin" -DCMAKE_INSTALL_PREFIX=install -DgRPC_INSTALL_default=ON -DgRPC_BUILD_TESTS=OFF -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_PROTOBUF_PACKAGE_TYPE=CONFIG -DgRPC_SSL_PROVIDER=package -Bgrpc/build -Sgrpc
+#    - ./dockcross_manylinux-x64 make -Cgrpc/build install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bdronecodesdk/build/default -Sdronecodesdk
     - ./dockcross_manylinux-x64 make -Cdronecodesdk/build/default install
     - ls install
