@@ -23,8 +23,8 @@ install:
 script:
     - set -e
     - mkdir -p ${TRAVIS_BUILD_DIR}/install
-    - ./dockcross_manylinux-x64 bash -c "cd zlib && ./configure --prefix=/install --static"
-    - ./dockcross_manylinux-x64 --args "-v ${TRAVIS_BUILD_DIR}/install:/install" make -Czlib install
+    - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Bzlib/build -Szlib
+    - ./dockcross_manylinux-x64 make -Czlib/build install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_INSTALL_PREFIX=install -Btinyxml2/build -Stinyxml2
     - ./dockcross_manylinux-x64 make -Ctinyxml2/build install
     - ./dockcross_manylinux-x64 cmake -DCMAKE_USE_OPENSSL=OFF -DCURL_CA_PATH_SET=OFF -DHAVE_POSIX_STRERROR_R=1 -Bcurl/build -Scurl
