@@ -2,9 +2,6 @@ FROM dockcross/manylinux-x64
 
 ENV DEFAULT_DOCKCROSS_IMAGE manylinux-x64-custom
 
-RUN yum update && \
-    yum install -y kernel-headers
-
 ADD https://www.cpan.org/src/5.0/perl-5.28.1.tar.gz .
 RUN tar xf perl-5.28.1.tar.gz && \
     cd perl-5.28.1 && \
